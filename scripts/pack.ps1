@@ -1,7 +1,7 @@
 # NS Turing - CCX Packaging Script
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 $DistDir     = Join-Path $ProjectRoot "dist"
-$CcxFile     = Join-Path $DistDir "NS-Turing-v1.0.0.ccx"
+$CcxFile     = Join-Path $DistDir "NS-Turing-v0.1.0.ccx"
 
 # Clean
 if (Test-Path $DistDir) { Remove-Item -Recurse -Force $DistDir -ErrorAction SilentlyContinue }
