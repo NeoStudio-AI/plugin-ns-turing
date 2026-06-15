@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# IDE
+.qoder/
+
+# Debug
+debug.json
+
+# OS
+.DS_Store
+Thumbs.db

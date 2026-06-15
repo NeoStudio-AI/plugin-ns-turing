@@ -1,0 +1,14 @@
+{
+  "name": "ns-turing",
+  "version": "0.1.0",
+  "description": "NS Turing — AI Image Generation panel plugin for Adobe Photoshop (UXP). Supports text-to-image and image-to-image via OpenAI and Google Gemini.",
+  "author": "NeoStudio",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NeoStudio-AI/plugin-ns-turing"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5"
+  }
+}
