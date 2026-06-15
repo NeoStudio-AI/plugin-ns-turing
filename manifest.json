@@ -1,7 +1,7 @@
 {
-    "id": "com.neostudio.turing"
+    "id": "com.neostudio.turing",
     "name": "NS Turing",
-    "version": "0.1.0"
+    "version": "0.1.0",
     "main": "index.html",
     "manifestVersion": 5,
     "host": {
@@ -11,7 +11,7 @@
     "entrypoints": [
         {
             "type": "panel",
-            "id": "neostudio.turing.panel"
+            "id": "neostudio.turing.panel",
             "label": { "default": "NS Turing" },
             "minimumSize": { "width": 320, "height": 400 },
             "maximumSize": { "width": 800, "height": 2000 },
