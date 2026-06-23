@@ -1,30 +1,23 @@
 /* ============================================================
-   NS Turing - Model Selector Component (Custom Dropdown)
-   Replaces native <select> to avoid UXP z-index occlusion.
+   NS Turing - Model Selector (Spectrum sp-picker)
    ============================================================ */
 
 /**
- * Initialize custom model picker dropdown.
+ * Initialize model picker using Spectrum sp-picker + sp-menu-item.
  */
 function initModelSelector() {
-    const els = window.__els;
-    if (!els) return;
+    var picker = document.getElementById("model-picker");
+    var menu = document.getElementById("model-menu");
+    if (!picker || !menu) return;
 
-    const picker = document.getElementById("model-picker");
-    const btn = els.modelPickerBtn;
-    const dropdown = els.modelPickerDropdown;
-    const label = els.modelPickerLabel;
-    if (!picker || !btn || !dropdown || !label) return;
-
-    // Build dropdown items from derived flat models (from providers)
+    /** Get flat model list from providers */
     function getModels() {
         var config = window.__turingConfig || window.CONFIG;
         var providers = config.providers || [];
         return window.deriveFlatModels(providers);
     }
-    var models = getModels();
 
-    /** Find a flat model entry matching a composite key "providerId|modelId" */
+    /** Find a model entry matching a composite key "providerId|modelId" */
     function findModelByKey(key) {
         if (!key) return null;
         var providers = (window.__turingConfig || window.CONFIG).providers || [];
@@ -35,109 +28,69 @@ function initModelSelector() {
         });
     }
 
-    /** Check if a flat model matches a composite key */
-    function modelMatchesKey(model, key) {
-        if (!key || !model) return false;
-        var providers = (window.__turingConfig || window.CONFIG).providers || [];
-        var parsed = window.parseModelKey(key, providers);
-        return model.providerId === parsed.providerId && model.id === parsed.modelId;
+    /** Build display text: "ModelName · ProviderName" */
+    function itemLabel(model) {
+        return model.name + " · " + model.providerName;
     }
 
-    var selectedModel = window.state.get("selectedModel") || window.CONFIG.selectedModel;
-
-    function renderItems() {
-        var currentModels = getModels();
-        var current = window.state.get("selectedModel");
-        dropdown.innerHTML = "";
-
-        currentModels.forEach(function (m) {
-            var item = document.createElement("div");
-            item.className = "model-picker-item";
-            if (modelMatchesKey(m, current)) {
-                item.classList.add("selected");
-            }
-
-            var nameSpan = document.createElement("span");
-            nameSpan.textContent = m.name;
-
-            var tag = document.createElement("span");
-            tag.className = "model-provider-tag";
-            tag.textContent = m.providerName;
-
-            item.appendChild(nameSpan);
-            item.appendChild(tag);
-
-            (function (model) {
-                item.addEventListener("click", function () {
-                    var compositeKey = window.composeModelKey(model.providerId, model.id);
-                    window.state.set("selectedModel", compositeKey);
-                    console.log("[ModelSelector] Changed to:", compositeKey);
-                    closeDropdown();
-                });
-            })(m);
-
-            dropdown.appendChild(item);
-        });
+    /** Build composite key from model entry */
+    function modelKey(model) {
+        return window.composeModelKey(model.providerId, model.id);
     }
 
-    function openDropdown() {
-        renderItems();
-        dropdown.classList.remove("hidden");
-        picker.classList.add("open");
-    }
-
-    function closeDropdown() {
-        dropdown.classList.add("hidden");
-        picker.classList.remove("open");
-    }
-
-    // Toggle on button click
-    btn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        if (dropdown.classList.contains("hidden")) {
-            openDropdown();
-        } else {
-            closeDropdown();
-        }
-    });
-
-    // Close when clicking outside
-    document.addEventListener("click", function (e) {
-        if (!picker.contains(e.target)) {
-            closeDropdown();
-        }
-    });
-
-    // Get display label for the selected model (just model name, provider shown in tag)
-    function getDisplayLabel(model) {
-        if (!model) return null;
-        return model.name;
-    }
-
-    // Update label when state changes
-    window.state.on("selectedModel", function (value) {
-        var model = findModelByKey(value);
-        label.textContent = model ? getDisplayLabel(model) : value;
-        // Re-render if dropdown is open
-        if (!dropdown.classList.contains("hidden")) {
-            renderItems();
-        }
-    });
-
-    // Re-render when models list changes (e.g., user added a model in settings)
-    window.state.on("models", function () {
-        models = getModels();
+    /** Render all model items into the menu */
+    function render() {
+        var models = getModels();
         var currentKey = window.state.get("selectedModel");
-        var model = findModelByKey(currentKey);
-        label.textContent = model ? getDisplayLabel(model) : currentKey;
-        if (!dropdown.classList.contains("hidden")) {
-            renderItems();
+        menu.innerHTML = "";
+
+        models.forEach(function (model) {
+            var item = document.createElement("sp-menu-item");
+            item.setAttribute("value", modelKey(model));
+            item.textContent = itemLabel(model);
+            if (modelKey(model) === currentKey) {
+                item.setAttribute("selected", "");
+            }
+            menu.appendChild(item);
+        });
+
+        // Sync picker value to match selected
+        if (currentKey) {
+            picker.value = currentKey;
+        }
+    }
+
+    // --- Initial render ---
+    render();
+
+    // --- Change event: user picks a model ---
+    picker.addEventListener("change", function () {
+        var value = picker.value;
+        if (value && value !== "loading") {
+            window.state.set("selectedModel", value);
+            console.log("[ModelSelector] Changed to:", value);
         }
     });
 
-    // Set initial label
-    var initialModel = findModelByKey(selectedModel);
-    label.textContent = initialModel ? getDisplayLabel(initialModel) : selectedModel;
+    // --- State sync: external changes update picker ---
+    window.state.on("selectedModel", function (value) {
+        if (picker.value !== value) {
+            picker.value = value;
+            // Update selected attribute on items
+            Array.prototype.forEach.call(menu.children, function (item) {
+                if (item.getAttribute("value") === value) {
+                    item.setAttribute("selected", "");
+                } else {
+                    item.removeAttribute("selected");
+                }
+            });
+        }
+    });
+
+    // --- Models list changed (e.g., added/removed in settings) ---
+    window.state.on("models", function () {
+        render();
+    });
 }
 
 // Expose globally for non-module script loading (UXP compatibility)

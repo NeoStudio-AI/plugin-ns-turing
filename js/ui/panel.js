@@ -18,11 +18,9 @@ function getEl(id) {
 function initPanel() {
     window.__els = {
         promptInput: getEl("prompt-input"),
-        // Custom model picker (replaces native <select>)
+        // Spectrum sp-picker model selector
         modelPicker: getEl("model-picker"),
-        modelPickerBtn: getEl("model-picker-btn"),
-        modelPickerDropdown: getEl("model-picker-dropdown"),
-        modelPickerLabel: getEl("model-picker-label"),
+        modelMenu: getEl("model-menu"),
         chkCanvasRef: getEl("chk-canvas-ref"),
         chkLayerRef: getEl("chk-layer-ref"),
         layerPickerContainer: getEl("layer-picker-container"),

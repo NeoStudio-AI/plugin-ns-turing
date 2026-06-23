@@ -1,6 +1,6 @@
 {
   "name": "ns-turing",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "NS Turing — AI Image Generation panel plugin for Adobe Photoshop (UXP). Supports text-to-image and image-to-image via OpenAI and Google Gemini.",
   "author": "NeoStudio",
   "license": "MIT",
@@ -8,7 +8,46 @@
     "type": "git",
     "url": "https://github.com/NeoStudio-AI/plugin-ns-turing"
   },
+  "type": "module",
+  "scripts": {
+    "build": "webpack --mode production",
+    "watch": "webpack --watch --mode development"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@swc-uxp-wrappers/utils": "^1.0.0",
+    "@swc-uxp-wrappers/button": "^1.0.0",
+    "@swc-uxp-wrappers/textfield": "^1.0.0",
+    "@swc-uxp-wrappers/checkbox": "^1.0.0",
+    "@swc-uxp-wrappers/menu": "^1.0.0",
+    "@swc-uxp-wrappers/picker-button": "^1.0.0",
+    "@swc-uxp-wrappers/field-label": "^1.0.0",
+    "@swc-uxp-wrappers/divider": "^1.0.0",
+    "@swc-react/button": "0.19.8-react.3029",
+    "@swc-react/textfield": "0.13.11-react.3163",
+    "@swc-react/checkbox": "0.14.6-react.2993",
+    "@swc-react/menu": "0.16.9-react.3029",
+    "@swc-react/picker-button": "0.1.4-react.2993",
+    "@swc-react/field-label": "0.10.3-react.3029",
+    "@swc-react/divider": "0.6.6-react.3163",
+    "@swc-react/theme": "0.14.8-react.2993",
+    "@spectrum-web-components/theme": "0.14.8",
+    "@spectrum-web-components/styles": "0.22.1",
+    "@spectrum-web-components/base": "0.7.5",
+    "@spectrum-web-components/shared": "0.15.4"
+  },
   "devDependencies": {
+    "@babel/core": "^7.21.4",
+    "@babel/preset-env": "^7.21.4",
+    "@babel/preset-react": "^7.18.6",
+    "babel-loader": "^9.1.2",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.7.3",
+    "style-loader": "^3.3.0",
+    "html-webpack-plugin": "^5.5.1",
+    "webpack": "^5.80.0",
+    "webpack-cli": "^5.0.2",
     "sharp": "^0.34.5"
   }
 }

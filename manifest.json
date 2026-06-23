@@ -1,12 +1,15 @@
 {
     "id": "com.neostudio.turing",
     "name": "NS Turing",
-    "version": "0.1.0",
-    "main": "index.html",
+    "version": "0.2.0",
+    "main": "dist/index.html",
     "manifestVersion": 5,
     "host": {
         "app": "PS",
-        "minVersion": "23.0.0"
+        "minVersion": "24.4"
+    },
+    "featureFlags": {
+        "enableSWCSupport": true
     },
     "entrypoints": [
         {

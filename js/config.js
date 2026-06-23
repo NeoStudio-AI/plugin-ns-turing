@@ -63,6 +63,7 @@ var CONFIG = {
     // Generation defaults
     maxReferenceImages: 10,
     maxImageSizeMB: 20,
+    maxPromptWords: 110,
     imageQuality: 0.92,
 
     // Storage

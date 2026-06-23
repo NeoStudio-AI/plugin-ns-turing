@@ -34,18 +34,18 @@ async function loadLayers() {
 
     try {
         els.btnRefreshLayers.textContent = "加载中...";
-        els.btnRefreshLayers.disabled = true;
+        els.btnRefreshLayers.classList.add("disabled");
 
         const layers = await window.ps.listLayers();
         window.state.set("availableLayers", layers);
         renderLayerList(layers);
 
         els.btnRefreshLayers.textContent = "刷新图层";
-        els.btnRefreshLayers.disabled = false;
+        els.btnRefreshLayers.classList.remove("disabled");
     } catch (e) {
         console.error("[LayersPicker] Failed to load layers:", e);
         els.btnRefreshLayers.textContent = "刷新失败，重试";
-        els.btnRefreshLayers.disabled = false;
+        els.btnRefreshLayers.classList.remove("disabled");
     }
 }
 

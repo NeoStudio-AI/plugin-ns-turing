@@ -20,20 +20,9 @@ function initSettings() {
     var els = window.__els;
     if (!els) return;
 
-    /** Close the model picker dropdown when opening settings */
-    function closeModelDropdown() {
-        if (els.modelPickerDropdown) {
-            els.modelPickerDropdown.classList.add("hidden");
-        }
-        if (els.modelPicker) {
-            els.modelPicker.classList.remove("open");
-        }
-    }
-
     // Open settings
     if (els.btnSettings) {
         els.btnSettings.addEventListener("click", function () {
-            closeModelDropdown();
             hideProviderForm();
             hideProviderConfigPanel();
             renderProviderList();
@@ -534,7 +523,7 @@ async function handleFetchModels() {
     }
 
     // Update UI to loading state
-    if (fetchBtn) fetchBtn.disabled = true;
+    if (fetchBtn) fetchBtn.classList.add("disabled");
     if (fetchStatus) {
         fetchStatus.textContent = "正在获取模型列表...";
         fetchStatus.className = "fetch-status";
@@ -544,7 +533,7 @@ async function handleFetchModels() {
     var prov = providers.find(function (p) { return p.id === configuringProviderId; });
     if (!prov) {
         setSettingsStatus("服务商信息丢失", "error");
-        if (fetchBtn) fetchBtn.disabled = false;
+        if (fetchBtn) fetchBtn.classList.remove("disabled");
         return;
     }
 
@@ -563,7 +552,7 @@ async function handleFetchModels() {
                 fetchStatus.textContent = "未找到可用的图片生成模型";
                 fetchStatus.className = "fetch-status error";
             }
-            if (fetchBtn) fetchBtn.disabled = false;
+            if (fetchBtn) fetchBtn.classList.remove("disabled");
             return;
         }
 
@@ -583,7 +572,7 @@ async function handleFetchModels() {
         }
         setSettingsStatus("API 信息错误: " + e.message, "error");
     } finally {
-        if (fetchBtn) fetchBtn.disabled = false;
+        if (fetchBtn) fetchBtn.classList.remove("disabled");
     }
 }
 
@@ -672,7 +661,8 @@ async function fetchGeminiImageModels(apiUrl, apiKey) {
 }
 
 /**
- * Render model checkbox list. Pre-check models that are already saved.
+ * Render model checkbox list using Spectrum sp-checkbox.
+ * Pre-check models that are already saved.
  */
 function renderModelCheckboxList(availableModels, savedModels) {
     var list = document.getElementById("model-checkbox-list");
@@ -683,29 +673,21 @@ function renderModelCheckboxList(availableModels, savedModels) {
     var savedIds = (savedModels || []).filter(function (m) { return m.enabled !== false; }).map(function (m) { return m.id; });
 
     availableModels.forEach(function (model) {
-        var item = document.createElement("label");
-        item.className = "model-checkbox-item";
-
-        var checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.value = model.id;
-        checkbox.setAttribute("data-model-name", model.name);
-        // Pre-check if already saved
+        var cb = document.createElement("sp-checkbox");
+        cb.setAttribute("value", model.id);
+        cb.setAttribute("data-model-name", model.name);
+        var label = model.name && model.name !== model.id ? model.name + " · " + model.id : model.id;
+        // Truncate long labels to prevent wrapping in UXP's limited layout
+        var display = label.length > 42 ? label.slice(0, 39) + "..." : label;
+        cb.textContent = display;
+        cb.style.marginBottom = "10px";
+        cb.style.lineHeight = "20px";
+        cb.style.minHeight = "20px";
+        cb.title = label;
         if (savedIds.indexOf(model.id) >= 0) {
-            checkbox.checked = true;
+            cb.setAttribute("checked", "");
         }
-
-        var labelText = document.createElement("span");
-        labelText.textContent = model.name;
-
-        var idSpan = document.createElement("span");
-        idSpan.className = "model-id";
-        idSpan.textContent = model.id;
-
-        item.appendChild(checkbox);
-        item.appendChild(labelText);
-        item.appendChild(idSpan);
-        list.appendChild(item);
+        list.appendChild(cb);
     });
 
     list.classList.remove("hidden");
@@ -732,13 +714,13 @@ async function handleSaveProviderConfig() {
         return;
     }
 
-    // Collect selected models from checkbox list
+    // Collect selected models from sp-checkbox list
     var selectedModels = [];
-    var checkboxes = document.querySelectorAll("#model-checkbox-list input[type='checkbox']:checked");
+    var checkboxes = document.querySelectorAll("#model-checkbox-list sp-checkbox[checked]");
     checkboxes.forEach(function (cb) {
         selectedModels.push({
-            id: cb.value,
-            name: cb.getAttribute("data-model-name") || cb.value,
+            id: cb.getAttribute("value"),
+            name: cb.getAttribute("data-model-name") || cb.getAttribute("value"),
             enabled: true
         });
     });

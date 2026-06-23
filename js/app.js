@@ -30,7 +30,7 @@ function initApp() {
     // Monitor generating state to disable button
     window.state.on("generating", (isGenerating) => {
         if (btnGenerate) {
-            btnGenerate.disabled = isGenerating;
+            btnGenerate.classList.toggle("disabled", isGenerating);
             btnGenerate.textContent = isGenerating ? "生成中..." : "生成图片";
         }
     });
@@ -79,6 +79,15 @@ async function handleGenerate() {
         const prompt = (window.state.get("prompt") || "").trim();
         if (!prompt) {
             setError("请输入提示词 (Prompt)");
+            focusPrompt();
+            return;
+        }
+
+        // Validate prompt length
+        const promptUnits = window.countPromptUnits(prompt);
+        const maxUnits = window.CONFIG.maxPromptWords;
+        if (promptUnits > maxUnits) {
+            setError("提示词过长（" + promptUnits + " / " + maxUnits + "），请精简描述以确保生成质量");
             focusPrompt();
             return;
         }
