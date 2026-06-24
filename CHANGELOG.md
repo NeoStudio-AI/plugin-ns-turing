@@ -1,6 +1,6 @@
 # Changelog
 
-所有版本变更记录在此文件。详细发布说明见 `docs/RELEASE-vX.Y.Z.md`。
+所有版本变更记录在此文件。详细发布说明见 `release/vX.Y.Z/RELEASE_NOTES.md`。
 
 ---
 
@@ -31,7 +31,7 @@
 - SVG icon fill="none" 渲染异常
 - flex `gap` 在 UXP CEF 中不生效
 
-完整发布说明：[docs/RELEASE-v0.2.0.md](docs/RELEASE-v0.2.0.md)
+完整发布说明：[release/v0.2.0/RELEASE_NOTES.md](release/v0.2.0/RELEASE_NOTES.md)
 GitHub Release：https://github.com/NeoStudio-AI/plugin-ns-turing/releases/tag/v0.2.0
 
 ---
