@@ -129,6 +129,7 @@ export default function ProviderConfigPanel({ provider, onSave, onBack }) {
                 <label className="form-label">API 密钥</label>
                 <div className="form-input-wrapper">
                     <sp-textfield
+                        key={keyVisible ? "visible" : "hidden"}
                         type={keyVisible ? "text" : "password"}
                         size="m"
                         quiet
