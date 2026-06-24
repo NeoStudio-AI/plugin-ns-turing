@@ -8,6 +8,7 @@ dist/
 release/**/*.ccx
 
 # Development artifacts (NOT for GitHub)
+docs/
 screenshots/
 演示视频/
 screenshot_localhost_3456.png

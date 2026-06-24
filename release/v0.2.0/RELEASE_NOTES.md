@@ -1,3 +1,107 @@
+# NS Turing v0.2.0 - Release Notes
+
+**Release Date**: 2026-06-23
+**Minimum Photoshop**: 24.4.0
+**Plugin ID**: `com.neostudio.turing`
+
+---
+
+## Highlights
+
+v0.2.0 is a **major architecture refactor + UI upgrade**:
+
+- Rendering layer rebuilt from vanilla JS to **React 18**
+- UI controls migrated from native HTML to **Spectrum Web Components**
+- Added **API Provider Management** interface (add / edit / delete / configure)
+
+All existing features preserved. **No changes to user workflow.**
+
+---
+
+## New Features
+
+### API Provider Management (gear icon -> API Provider Management)
+
+- **Add provider**: Support OpenAI / Google Gemini
+- **Edit provider**: Modify name / switch type
+- **Delete provider**: With secondary confirmation (prevent accidents)
+- **Configure provider**: Set API Key, API URL, enable/disable models
+- **Multiple providers**: Support multiple OpenAI / Gemini providers with independent keys and model lists
+
+### UI Controls Upgraded
+
+| Before | After |
+|---|---|
+| Native `<select>` | `<sp-picker>` Spectrum dropdown (unified visual) |
+| Native `<input>` | `<sp-textfield>` / `<sp-textarea>` Spectrum input |
+| Native `<input type="checkbox">` | `<sp-checkbox>` Spectrum checkbox |
+| Eye icon for API key | Support show / hide API key |
+
+---
+
+## Architecture Upgrade
+
+| Layer | v0.1.0 | v0.2.0 |
+|---|---|---|
+| Rendering | Native DOM | React 18 + Webpack 5 |
+| State | Custom state.js | useReducer + Context |
+| UI Controls | Native HTML | Spectrum Web Components |
+| Build | None (ES Module) | Webpack 5 + SWC + Babel |
+| Bundle | Single file | bundle.js + layered modules |
+
+---
+
+## Bug Fixes
+
+- API provider list lost on restart (now persisted to config.json)
+- Delete provider had no confirmation (now has confirmation page)
+- Checkbox rendering offset in UXP CEF
+- Multiple UI element vertical alignment issues
+- Model selector not refreshing on provider switch
+
+---
+
+## Installation
+
+1. Download `NS-Turing-v0.2.0.ccx` (~460KB)
+2. Open UXP Developer Tool
+3. Click "Add Plugin" -> select .ccx file
+4. After loading: Photoshop -> Plugins menu -> NS Turing
+
+Or double-click .ccx to install directly (on configured UXP systems).
+
+---
+
+## First-Time Setup
+
+1. Open plugin panel, click gear icon (top-right)
+2. Go to "API Provider Management"
+3. Click "+ Add Provider"
+4. Enter name (e.g. "My OpenAI"), select type, save
+5. Click the newly added provider card
+6. Fill in API Key and API URL
+7. Click "Fetch Model List" -> check models to enable
+8. Click "Save Configuration"
+
+---
+
+## Known Issues
+
+- OpenAI provider requires user to provide own API Key (no built-in default Key)
+- Icons do not update in real-time when PS theme switches; reopen the panel
+- PS internal `_handleDocumentEvent` warnings occasionally appear in console (harmless)
+
+---
+
+## Upgrade from v0.1.0
+
+**Direct over-install** works. v0.1.0 API Key configurations (in settings panel) are preserved.
+
+---
+
+## License
+
+MIT (c) NeoStudio
 # NS Turing v0.2.0 — 发布说明
 
 **发布日期**：2026-06-23
