@@ -631,6 +631,8 @@ sp-menu-item { line-height: 28px; min-height: 28px; padding: 4px 10px; }
     overflow: visible;
 }
 .toggle-key-btn:hover { opacity: 1; }
+.toggle-key-btn img,
+.toggle-key-btn svg { pointer-events: none; flex-shrink: 0; display: block; }
 
 /* Provider List */
 .provider-list {
