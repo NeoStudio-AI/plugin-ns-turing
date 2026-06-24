@@ -7,6 +7,32 @@ dist/
 # Packaged plugin releases (build artifacts)
 *.ccx
 
+# Local release archive (NOT tracked - distributed via GitHub Releases)
+release/
+
+# Development artifacts (NOT for GitHub)
+screenshots/
+演示视频/
+screenshot_localhost_3456.png
+
+# IDE
+.qoder/
+
+# Debug
+debug.json
+
+# OS
+.DS_Store
+Thumbs.db
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Packaged plugin releases (build artifacts)
+*.ccx
+
 # IDE
 .qoder/
 
