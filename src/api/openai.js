@@ -175,26 +175,15 @@ export class OpenAIProvider extends ImageProvider {
         if (!w || !h) return "1024x1024";
         var isGptImage = model && model.indexOf("gpt-image") >= 0;
         if (isGptImage) {
-            var rw = Math.floor(w / 16) * 16;
-            var rh = Math.floor(h / 16) * 16;
-            var minSide = Math.min(rw, rh);
-            if (minSide < 1024) {
-                var scale = 1024 / minSide;
-                rw = Math.floor(rw * scale / 16) * 16;
-                rh = Math.floor(rh * scale / 16) * 16;
-            }
-            rw = Math.min(3840, rw);
-            rh = Math.min(3840, rh);
-            var MAX_PIXELS = 3840 * 2160;
-            if (rw * rh > MAX_PIXELS) {
-                var areaScale = Math.sqrt(MAX_PIXELS / (rw * rh));
-                rw = Math.floor(rw * areaScale / 16) * 16;
-                rh = Math.floor(rh * areaScale / 16) * 16;
-            }
-            console.log("[OpenAI] Canvas " + w + "x" + h + " → size " + rw + "x" + rh);
-            return rw + "x" + rh;
+            // OpenAI gpt-image 仅支持三种固定尺寸
+            // 1024x1024 (1:1), 1024x1536 (2:3 竖图), 1536x1024 (3:2 横图)
+            // 按画布长宽比选择最接近的支持尺寸（而非返回原始尺寸）
+            var ratio = w / h;
+            if (ratio > 1.3) return "1536x1024";   // landscape
+            if (ratio < 0.77) return "1024x1536";  // portrait
+            return "1024x1024";                     // square
         }
-        var ratio = w / h;
+        // 其他模型（DALL-E 2/3）：使用标准尺寸
         if (ratio > 1.3) return "1792x1024";
         if (ratio < 0.77) return "1024x1792";
         return "1024x1024";
